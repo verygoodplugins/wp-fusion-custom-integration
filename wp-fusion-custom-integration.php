@@ -4,7 +4,7 @@
 Plugin Name: WP Fusion - Custom Integration
 Description: Boostrap for adding a new plugin integration module to WP Fusion
 Plugin URI: https://verygoodplugins.com/
-Version: 1.0.1
+Version: 1.0.2
 Author: Very Good Plugins
 Author URI: https://verygoodplugins.com/
 */
@@ -34,28 +34,19 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-
-if ( ! class_exists( 'WPF_My_Plugin_Name' ) ) {
-	include_once dirname( __FILE__ ) . '/includes/class-my-plugin-slug.php';
-}
-
 /**
- * Register integration.
+ * Include the integration class (priority 15 so the rest of the WPF
+ * integrations have loaded).
  *
- * Add our custom integration class to the list of registered integrations.
- *
- * @since  1.0.0
- *
- * @param  array $integrations The array of registered CRM modules.
- * @return array $integrations The array of registered CRM modules.
+ * @since 1.0.2
  */
 
-function wpf_register_integration( $integrations ) {
+function wpf_include_custom_integration() {
 
-	$integrations['my-plugin-slug'] = 'My/PluginDependencyClass';
-
-	return $integrations;
+	if ( class_exists( 'My/PluginDependencyClass' ) ) {
+		include_once dirname( __FILE__ ) . '/includes/class-my-plugin-slug.php';
+	}
 
 }
 
-add_filter( 'wpf_integrations', 'wpf_register_integration' );
+add_action( 'plugins_loaded', 'wpf_include_custom_integration', 15 );
