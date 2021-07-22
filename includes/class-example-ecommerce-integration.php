@@ -65,6 +65,8 @@ class WPF_Example_Ecommerce_Integration extends WPF_Integrations_Base {
 	 *
 	 * @since  1.1.0
 	 *
+	 * @see    get_contact_edit_url()
+	 *
 	 * @param  int         $order_id The order ID
 	 * @return bool|string The contact ID or false.
 	 */
@@ -163,7 +165,12 @@ class WPF_Example_Ecommerce_Integration extends WPF_Integrations_Base {
 
 		do_action( "wpf_{$this->slug}_payment_complete", $order_id, $contact_id );
 
-		$order->add_order_note( 'WP Fusion order actions completed.' );
+		// Get the link to edit the contact in the CRM
+
+		$edit_url = wp_fusion()->crm_base->get_contact_edit_url( $contact_id );
+		$note     = sprintf( __( 'WP Fusion order actions completed (contact ID <a href="%1$s" target="blank">#%2$s</a>).', 'wp-fusion' ), $edit_url, $contact_id );
+
+		$order->add_order_note( $note );
 
 		return $contact_id;
 
