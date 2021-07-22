@@ -45,7 +45,7 @@ This is an example of how WP Fusion integrates with form plugins, like [Gravity 
 
 ### Installing
 
-Upload to your /wp-content/plugins/ directory, update the examples with methods from your plugin, stir, and serve 🍸.
+Upload to your /wp-content/plugins/ directory, update with methods from your plugin, stir, and serve 🍸.
 
 ## Changelog
 
