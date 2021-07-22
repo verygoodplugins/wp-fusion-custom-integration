@@ -5,36 +5,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * My Plugin Name integration
+ * Example Membership integration
  *
- * @since 1.0.0
+ * @since 1.1.0
  */
 
-class WPF_My_Plugin_Name extends WPF_Integrations_Base {
+class WPF_Example_Membership_Integration extends WPF_Integrations_Base {
 
 	/**
 	 * This identifies the integration internally and makes it available at
 	 * wp_fusion()->integrations->{'my-plugin-slug'}
 	 *
 	 * @var  string
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 */
 
-	public $slug = 'my-plugin-slug';
+	public $slug = 'my-membership-plugin';
 
 	/**
 	 * The human-readable name of the integration.
 	 *
 	 * @var  string
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 */
 
-	public $name = 'My Plugin Name';
+	public $name = 'My Membership Plugin';
 
 	/**
 	 * Get things started.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 */
 
 	public function init() {
@@ -60,7 +60,7 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	/**
 	 * Filter the POSTed meta fields during registration or profile update.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 *
 	 * @link https://wpfusion.com/documentation/filters/wpf_user_register/
 	 * @link https://wpfusion.com/documentation/filters/wpf_user_update/
@@ -97,7 +97,7 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	 * Gets metadata for a user that's calculated or not in the wp_usermeta
 	 * table.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 *
 	 * @link https://wpfusion.com/documentation/filters/wpf_get_user_meta/
 	 *
@@ -119,7 +119,7 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	 * Registers the meta field group on the Contact Fields tab in the WP Fusion
 	 * settings.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 *
 	 * @param  array $field_groups The field groups.
 	 * @return array The field groups.
@@ -140,7 +140,7 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	/**
 	 * Register the custom meta fields for sync.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 *
 	 * @link   https://wpfusion.com/documentation/filters/wpf_meta_fields/
 	 *
@@ -149,6 +149,20 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	 */
 
 	public function prepare_meta_fields( $meta_fields ) {
+
+		$custom_fields = get_option( 'my_plugin_custom_fields', array() ); // get your plugin's available custom fields
+
+		foreach ( $custom_fields as $key => $field ) {
+
+			$meta_fields[ $key ] = array(
+				'label' => $field['name'],
+				'type'  => $field['type'],
+				'group' => $this->slug,
+			);
+
+		}
+
+		// Or, list them manually:
 
 		$meta_fields['meta_field_key'] = array(
 			'label' => 'Meta field name',
@@ -171,7 +185,7 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 	/**
 	 * Add a custom field to the Integrations tab in the WP Fusion settings.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 *
 	 * @param  array $settings  The registered settings.
 	 * @param  array $options   The options in the database.
@@ -213,4 +227,4 @@ class WPF_My_Plugin_Name extends WPF_Integrations_Base {
 
 }
 
-new WPF_My_Plugin_Name();
+new WPF_Example_Membership_Integration();

@@ -3,8 +3,8 @@
 /*
 Plugin Name: WP Fusion - Custom Integration
 Description: Boostrap for adding a new plugin integration module to WP Fusion
-Plugin URI: https://verygoodplugins.com/
-Version: 1.0.2
+Plugin URI: https://wpfusion.com/
+Version: 1.1.0
 Author: Very Good Plugins
 Author URI: https://verygoodplugins.com/
 */
@@ -35,8 +35,7 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 /**
- * Include the integration class (priority 15 so the rest of the WPF
- * integrations have loaded).
+ * Include the integration classes after WP Fusion has loaded.
  *
  * @since 1.0.2
  */
@@ -44,9 +43,17 @@ if ( ! function_exists( 'add_action' ) ) {
 function wpf_include_custom_integration() {
 
 	if ( class_exists( 'My/PluginDependencyClass' ) ) {
-		include_once dirname( __FILE__ ) . '/includes/class-my-plugin-slug.php';
+		include_once dirname( __FILE__ ) . '/includes/class-example-ecommerce-integration.php';
+	}
+
+	if ( class_exists( 'MyFormsPlugin' ) ) {
+		include_once dirname( __FILE__ ) . '/includes/class-example-forms-integration.php';
+	}
+
+	if ( class_exists( 'MyMembershipPlugin' ) ) {
+		include_once dirname( __FILE__ ) . '/includes/class-example-membership-integration.php';
 	}
 
 }
 
-add_action( 'plugins_loaded', 'wpf_include_custom_integration', 15 );
+add_action( 'wp_fusion_init', 'wpf_include_custom_integration' );
