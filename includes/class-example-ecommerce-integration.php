@@ -42,6 +42,7 @@ class WPF_Example_Ecommerce_Integration extends WPF_Integrations_Base {
 		// Handle checkouts
 
 		add_action( 'my_plugin_checkout_completed', array( $this, 'process_order' ) );
+		add_action( 'my_plugin_order_refunded', array( $this, 'order_refunded' ) );
 
 		// Meta fields
 
@@ -308,6 +309,58 @@ class WPF_Example_Ecommerce_Integration extends WPF_Integrations_Base {
 		 */
 
 		return apply_filters( "wpf_{$this->slug}_customer_data", $customer_data, $order );
+
+	}
+
+	/**
+	 * Runs when an order is refunded and removes the tags from the customer.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param int   $order_id The order ID
+	 */
+
+	public function order_refunded( $order_id ) {
+
+		$order = new Example_Ecommerce_Order( $order_id );
+
+		$remove_tags = array();
+
+		// Get tags to remove
+
+		foreach ( $order->get_items() as $product_id => $product ) {
+
+			$settings = get_post_meta( $product_id, 'wpf_settings_product', true );
+
+			if ( ! empty( $settings ) && ! empty( $settings['apply_tags'] ) ) {
+				$remove_tags = array_merge( $remove_tags, $settings['apply_tags'] );
+			}
+		}
+
+		$remove_tags = array_filter( array_unique( $remove_tags ) );
+
+		if ( ! empty( $remove_tags ) ) {
+
+			$user_id = $order->get_user_id();
+
+			if ( $user_id ) {
+
+				// Registered users
+
+				wp_fusion()->user->remove_tags( $remove_tags, $user_id );
+
+			} else {
+
+				// Guests
+
+				$contact_id = get_post_meta( $order_id, wp_fusion()->crm->slug . '_contact_id', true );
+
+				if ( $contact_id ) {
+					wpf_log( 'info', 0, 'Removing tags from guest customer ' . $contact_id . ': ', array( 'tag_array' => $remove_tags ) );
+					$result = wp_fusion()->crm->remove_tags( $remove_tags, $contact_id );
+				}
+			}
+		}
 
 	}
 

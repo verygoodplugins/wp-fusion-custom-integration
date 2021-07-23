@@ -49,6 +49,9 @@ Upload to your /wp-content/plugins/ directory, update with methods from your plu
 
 ## Changelog
 
+### 1.1.1 - 7/23/2021 =
+* Added example `order_refunded()` method to the ecommerce integration class
+
 ### 1.1.0 - 7/22/2021
 * Added example classes for membership, ecommerce, and forms.
 

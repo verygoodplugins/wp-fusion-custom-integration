@@ -4,7 +4,7 @@
 Plugin Name: WP Fusion - Custom Integration
 Description: Boostrap for adding a new plugin integration module to WP Fusion
 Plugin URI: https://wpfusion.com/
-Version: 1.1.0
+Version: 1.1.1
 Author: Very Good Plugins
 Author URI: https://verygoodplugins.com/
 */
